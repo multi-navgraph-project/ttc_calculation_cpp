@@ -45,20 +45,33 @@ public:
         Vehicle vehicle_i = sample.vehicle_i;
         Vehicle vehicle_j = sample.vehicle_j;
 
-        // Compute distance to overlap considering heading
-        Point front_i = {vehicle_i.position.x + vehicle_i.heading.hx * vehicle_i.length / 2, vehicle_i.position.y + vehicle_i.heading.hy * vehicle_i.length / 2};
-        Point front_j = {vehicle_j.position.x + vehicle_j.heading.hx * vehicle_j.length / 2, vehicle_j.position.y + vehicle_j.heading.hy * vehicle_j.length / 2};
+        // Compute relative velocity
+        double rel_vx = vehicle_j.velocity.x - vehicle_i.velocity.x;
+        double rel_vy = vehicle_j.velocity.y - vehicle_i.velocity.y;
 
+        // Compute dot product of relative velocity and heading of each vehicle
+        double dot_i = rel_vx * vehicle_i.heading.hx + rel_vy * vehicle_i.heading.hy;
+        double dot_j = rel_vx * vehicle_j.heading.hx + rel_vy * vehicle_j.heading.hy;
+
+        // Compute front point based on dot product
+        Point front_i, front_j;
+
+        front_i.x = vehicle_i.position.x + (dot_i >= 0 ? 1 : -1) * vehicle_i.heading.hx * vehicle_i.length / 2;
+        front_i.y = vehicle_i.position.y + (dot_i >= 0 ? 1 : -1) * vehicle_i.heading.hy * vehicle_i.length / 2;
+
+        front_j.x = vehicle_j.position.x + (dot_j >= 0 ? 1 : -1) * vehicle_j.heading.hx * vehicle_j.length / 2;
+        front_j.y = vehicle_j.position.y + (dot_j >= 0 ? 1 : -1) * vehicle_j.heading.hy * vehicle_j.length / 2;
+
+        // Now compute distance and overlap as before
         double dx = front_i.x - front_j.x;
         double dy = front_i.y - front_j.y;
         double distance = sqrt(dx * dx + dy * dy);
+        double overlap = distance - (vehicle_i.length / 2) - (vehicle_j.length / 2);
 
-        double overlap = distance;
-        cout << "front_i.x : " << front_i.x << "front_i.y : " << front_i.y << "\n";
-        cout << "front_j.x : " << front_j.x << "front_j.y : " << front_j.y << "\n";
-        cout << "overlap : " << distance << "\n";
+        cout << "overlap : " << overlap << "\n";
+        cout << "distance : " << distance << "\n";
 
-        return overlap;
+        return (overlap > 0) ? overlap : numeric_limits<double>::infinity();
     }
 
     // Compute TTC
@@ -69,18 +82,10 @@ public:
 
         // Compute relative velocity
         Point direct_v = {sample.vehicle_i.velocity.x - sample.vehicle_j.velocity.x, sample.vehicle_i.velocity.y - sample.vehicle_j.velocity.y};
-        cout << "VITESSE : " << direct_v.x;
-        // Compute TTC
-        double TTC;
-        if (fabs(dist2overlap) < 0.2)
-        {
-            TTC = 0;
-        }
-        else
-        {
-            TTC = dist2overlap / sqrt(pow(direct_v.x, 2) + pow(direct_v.y, 2));
-        }
+        // cout << "VITESSE : " << direct_v.x;
+        //  Compute TTC
+        double TTC = dist2overlap / sqrt(pow(direct_v.x, 2) + pow(direct_v.y, 2));
 
-        return fabs(TTC);
+        return TTC;
     }
 };

@@ -63,8 +63,8 @@ int main(int argc, char **argv)
         sample.vehicle_i.position = {lastOdomAGV1.pose.pose.position.x,
                                      lastOdomAGV1.pose.pose.position.y};
 
-        sample.vehicle_i.velocity = {lastOdomAGV1.twist.twist.linear.x,
-                                     lastOdomAGV1.twist.twist.linear.y};
+        sample.vehicle_i.velocity = {lastOdomAGV1.twist.twist.linear.x * cos(yaw_ego),
+                                     lastOdomAGV1.twist.twist.linear.x * sin(yaw_ego)};
 
         sample.vehicle_i.heading = {cos(yaw_ego), sin(yaw_ego)};
 
@@ -73,8 +73,8 @@ int main(int argc, char **argv)
         sample.vehicle_j.position = {lastOdomAGV2.pose.pose.position.x,
                                      lastOdomAGV2.pose.pose.position.y};
 
-        sample.vehicle_j.velocity = {lastOdomAGV2.twist.twist.linear.x,
-                                     lastOdomAGV2.twist.twist.linear.y};
+        sample.vehicle_j.velocity = {lastOdomAGV2.twist.twist.linear.x * cos(yaw),
+                                     lastOdomAGV2.twist.twist.linear.x * sin(yaw)};
 
         sample.vehicle_j.heading = {cos(yaw), sin(yaw)};
 
