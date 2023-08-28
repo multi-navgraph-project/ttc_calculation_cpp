@@ -68,7 +68,9 @@ int main(int argc, char **argv)
 
         sample.vehicle_i.heading = {cos(yaw_ego), sin(yaw_ego)};
 
-        sample.vehicle_i.length = 2.0;
+        sample.vehicle_i.length = 1.853;
+
+        sample.vehicle_i.width = 1.855;
 
         sample.vehicle_j.position = {lastOdomAGV2.pose.pose.position.x,
                                      lastOdomAGV2.pose.pose.position.y};
@@ -78,7 +80,9 @@ int main(int argc, char **argv)
 
         sample.vehicle_j.heading = {cos(yaw), sin(yaw)};
 
-        sample.vehicle_j.length = 2.0;
+        sample.vehicle_j.length = 1.853;
+
+        sample.vehicle_j.width = 1.855;
 
         // Use lastOdomAGV1 and lastOdomAGV2 to populate sample
         // You will need to convert from the ROS Odometry message to your internal data structure
