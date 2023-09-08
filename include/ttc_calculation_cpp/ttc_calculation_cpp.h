@@ -194,8 +194,15 @@ public:
 
         // Compute relative velocity
         Point direct_v = {sample.vehicle_i.velocity.x - sample.vehicle_j.velocity.x, sample.vehicle_i.velocity.y - sample.vehicle_j.velocity.y};
-        // cout << "VITESSE : " << direct_v.x;
-        //  Compute TTC
+
+        // Check if the vehicles are moving away from each other
+        Point center_diff = {sample.vehicle_j.position.x - sample.vehicle_i.position.x, sample.vehicle_j.position.y - sample.vehicle_i.position.y};
+        if (dotProduct(direct_v, center_diff) < 0)
+        {
+            return std::numeric_limits<double>::infinity();
+        }
+
+        // Compute TTC
         double TTC = dist2overlap / sqrt(pow(direct_v.x, 2) + pow(direct_v.y, 2));
 
         return TTC;

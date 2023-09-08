@@ -60,7 +60,7 @@ int main(int argc, char **argv)
         ros::spinOnce(); // Process incoming messages
 
         // Populate sample[0] data
-        std::vector<TTCComputer::Sample> sample;
+        std::vector<TTCComputer::Sample> sample(2);
         double roll_ego, pitch_ego, yaw_ego;
         double roll, pitch, yaw;
         double roll_2, pitch_2, yaw_2;
